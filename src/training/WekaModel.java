@@ -1,7 +1,6 @@
-package preprocessing;
+package training;
 
 import weka.classifiers.Classifier;
-import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.BayesNet;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.functions.MultilayerPerceptron;
@@ -10,8 +9,9 @@ import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
-import java.util.Random;
+import java.io.FileWriter;
 
 public class WekaModel {
 
@@ -40,19 +40,15 @@ public class WekaModel {
         return modelName;
     }
 
-    public String train(String trainFile) throws Exception {
+    public void train(String trainFile) throws Exception {
         BufferedReader br = new BufferedReader(new FileReader(trainFile));
         Instances train = new Instances(br);
         train.setClassIndex(train.numAttributes() -1);
         classifier.buildClassifier(train);
-//        Evaluation evaluation = new Evaluation(train);
-//        evaluation.crossValidateModel(classifier, train, 10, new Random(1));
-//        evaluation.evaluateModel(classifier, train);
-//        return evaluation.toSummaryString();
-        return classifier.toString();
+        br.close();
     }
 
-    public String test(String testFile) throws Exception {
+    public void test(String testFile, String targetFile) throws Exception {
         BufferedReader br = new BufferedReader(new FileReader(testFile));
         Instances test = new Instances(br);
         test.setClassIndex(test.numAttributes() -1);
@@ -60,6 +56,9 @@ public class WekaModel {
             double label = classifier.classifyInstance(test.instance(i));
             test.instance(i).setClassValue(label);
         }
-        return test.toString();
+        BufferedWriter bw = new BufferedWriter(new FileWriter(targetFile));
+        bw.write(test.toString());
+        bw.close();
+        br.close();
     }
 }
