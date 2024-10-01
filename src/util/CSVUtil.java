@@ -1,8 +1,10 @@
 package util;
 
 import weka.core.Instances;
+import weka.core.converters.ArffLoader;
 import weka.core.converters.ArffSaver;
 import weka.core.converters.CSVLoader;
+import weka.core.converters.CSVSaver;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -48,17 +50,17 @@ public class CSVUtil {
     public static void combineFolder(String folderName, String targetFileName) throws Exception {
         List<String> fileNames = listFiles(folderName);
         BufferedWriter bw = new BufferedWriter(new FileWriter(targetFileName));
-        String dimensionName = null;
+        String attributes = null;
         for (String fileName : fileNames) {
             BufferedReader br = new BufferedReader(new FileReader(fileName));
             String line = br.readLine();  // first line is dimension names
             if (line == null) {
                 return;
             }
-            if (dimensionName == null) {
+            if (attributes == null) {
                 line = line.replaceFirst("Fwd Header Length", "Fwd Header Length 2");
-                dimensionName = line;
-                bw.write(dimensionName);
+                attributes = line;
+                bw.write(attributes);
             }
             while ((line = br.readLine()) != null) {
                 bw.newLine();
@@ -70,16 +72,40 @@ public class CSVUtil {
     }
 
     public static void csvToArff(String srcFile, String dstFile) throws IOException {
-        // load CSV
         CSVLoader loader = new CSVLoader();
         loader.setSource(new File(srcFile));
         Instances data = loader.getDataSet();
 
-        // save ARFF
         ArffSaver saver = new ArffSaver();
         saver.setInstances(data);
         saver.setFile(new File(dstFile));
-//        saver.setDestination(new File(dstFile));
         saver.writeBatch();
+    }
+
+    public static void arffToCsv(String srcFile, String dstFile) throws IOException {
+        ArffLoader loader = new ArffLoader();
+        loader.setSource(new File(srcFile));
+        Instances data = loader.getDataSet();
+
+        CSVSaver saver = new CSVSaver();
+        saver.setInstances(data);
+        saver.setFile(new File(dstFile));
+        saver.writeBatch();
+    }
+
+    public static void modifyLabel(String srcFile, String dstFile, String substitute) throws IOException {
+        BufferedWriter bw = new BufferedWriter(new FileWriter(dstFile));
+        BufferedReader br = new BufferedReader(new FileReader(srcFile));
+        String line = br.readLine();  // first line is dimension names
+        bw.write(line);
+        while ((line = br.readLine()) != null) {
+            String[] splits = line.split(",");
+            splits[splits.length - 1] = substitute;
+            line = String.join(",", splits);
+            bw.newLine();
+            bw.write(line);
+        }
+        br.close();
+        bw.close();
     }
 }

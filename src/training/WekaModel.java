@@ -8,10 +8,7 @@ import weka.classifiers.trees.J48;
 import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 
 public class WekaModel {
 
@@ -48,13 +45,17 @@ public class WekaModel {
         br.close();
     }
 
-    public void test(String testFile, String targetFile) throws Exception {
+    public void test(String testFile, String targetFile) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(testFile));
         Instances test = new Instances(br);
         test.setClassIndex(test.numAttributes() -1);
         for (int i = 0; i < test.size(); i++) {
-            double label = classifier.classifyInstance(test.instance(i));
-            test.instance(i).setClassValue(label);
+            try {
+                double label = classifier.classifyInstance(test.instance(i));
+                test.instance(i).setClassValue(label);
+            } catch (Exception e) {
+                System.err.println(i + " : " + e.getMessage());
+            }
         }
         BufferedWriter bw = new BufferedWriter(new FileWriter(targetFile));
         bw.write(test.toString());
