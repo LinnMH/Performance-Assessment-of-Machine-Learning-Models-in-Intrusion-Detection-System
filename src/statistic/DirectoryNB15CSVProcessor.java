@@ -8,15 +8,15 @@ import java.util.Map;
 public class DirectoryNB15CSVProcessor {
 
     public static void main(String[] args) {
-        // 设置你的CSV文件所在的目录路径
-        String directoryPath = "D:\\bowen\\CS-870\\week3\\NB15\\CSV Files";  // 替换为你实际的路径
+        // Set the directory path where your CSV files are located
+        String directoryPath = "D:\\bowen\\CS-870\\week3\\NB15\\CSV Files";  // Replace with your actual path
         File folder = new File(directoryPath);
 
         Map<String, Integer> attackCount = new HashMap<>();
-        int[] benignCount = {0};  // 使用数组来保持可变性，确保可以在方法中正确更新
-        int[] attackTotal = {0};  // 用于二元分类中的总攻击数
+        int[] benignCount = {0};  // Using an array to ensure mutability, allowing proper updates in methods
+        int[] attackTotal = {0};  // Total count for binary classification attacks
 
-        // 处理目录中的每个CSV文件
+        // Process each CSV file in the directory
         if (folder.exists() && folder.isDirectory()) {
             for (File fileEntry : folder.listFiles()) {
                 if (fileEntry.isFile() && fileEntry.getName().endsWith(".csv")) {
@@ -28,39 +28,39 @@ public class DirectoryNB15CSVProcessor {
             return;
         }
 
-        // 计算总流量
+        // Calculate total traffic
         int totalTraffic = benignCount[0] + attackTotal[0];
 
-        // 输出过滤后的攻击类型统计，过滤掉数量为1的攻击类型
+        // Output filtered attack type statistics, filtering out attack types with only 1 instance
         System.out.println("\n--- Filtered Attack Count ---");
         System.out.printf("%-20s %-35s %20s%n", "Category", "Type", "Number of Instances");
         System.out.println("-------------------------------------------------------------");
 
         for (Map.Entry<String, Integer> entry : attackCount.entrySet()) {
-            if (entry.getValue() > 1) {  // 过滤掉数量为1的攻击类型
+            if (entry.getValue() > 1) {  // Filter out attack types with only 1 instance
                 System.out.printf("%-20s %-35s %20d%n", "attack", entry.getKey(), entry.getValue());
             }
         }
 
-        // 输出二元分类表格
+        // Output binary classification table
         System.out.println("\n--- Binary Classification Table ---");
         System.out.printf("%-20s %20s %25s%n", "Category", "Number of Instances", "Proportion");
         System.out.println("--------------------------------------------------------------");
 
-        // 输出BENIGN的统计
+        // Output BENIGN statistics
         double benignProportion = (double) benignCount[0] / totalTraffic * 100;
         System.out.printf("%-20s %20d %24.6f%%%n", "BENIGN", benignCount[0], benignProportion);
 
-        // 输出ATTACK的统计
+        // Output ATTACK statistics
         double attackProportion = (double) attackTotal[0] / totalTraffic * 100;
         System.out.printf("%-20s %20d %24.6f%%%n", "ATTACK", attackTotal[0], attackProportion);
 
-        // 输出按类别分类的攻击统计表
+        // Output categorized attack statistics table
         System.out.println("\n--- Categorized Attack Table ---");
         System.out.printf("%-20s %35s %20s%n", "Category", "Attack Type", "Number of Instances");
         System.out.println("---------------------------------------------------------------------");
 
-        // 遍历攻击类型，输出按类别分类的表格，并过滤掉数量为1的攻击
+        // Iterate through attack types, output categorized table, filtering out attacks with only 1 instance
         Map<String, Map<String, Integer>> categorizedAttackCount = categorizeAttacks(attackCount);
 
         for (Map.Entry<String, Map<String, Integer>> categoryEntry : categorizedAttackCount.entrySet()) {
@@ -68,13 +68,13 @@ public class DirectoryNB15CSVProcessor {
             Map<String, Integer> attacks = categoryEntry.getValue();
             int totalCategoryCount = attacks.values().stream().mapToInt(Integer::intValue).sum();
 
-            // 输出攻击类别的总数量
-            if (totalCategoryCount > 1) {  // 过滤掉数量为1的类别
+            // Output total number of attacks for the category
+            if (totalCategoryCount > 1) {  // Filter out categories with only 1 instance
                 System.out.printf("%-20s %35s %20d%n", category, category, totalCategoryCount);
 
-                // 输出该类别下的每种具体攻击类型
+                // Output each specific attack type in the category
                 for (Map.Entry<String, Integer> attackEntry : attacks.entrySet()) {
-                    if (attackEntry.getValue() > 1) {  // 过滤掉数量为1的具体攻击
+                    if (attackEntry.getValue() > 1) {  // Filter out specific attacks with only 1 instance
                         System.out.printf("%-20s %35s %20d%n", "", attackEntry.getKey(), attackEntry.getValue());
                     }
                 }
@@ -82,34 +82,34 @@ public class DirectoryNB15CSVProcessor {
         }
     }
 
-    // 处理单个CSV文件并统计每种攻击类型和benign数量
+    // Process a single CSV file and count each attack type and benign instances
     public static void processCSVFile(File csvFile, Map<String, Integer> attackCount, int[] benignCount, int[] attackTotal) {
         String line;
         String csvSplitBy = ",";
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-            String header = br.readLine();  // 跳过文件头
+            String header = br.readLine();  // Skip the file header
 
             while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty()) {
-                    continue;  // 跳过空行
+                    continue;  // Skip empty lines
                 }
 
                 String[] dataRow = line.split(csvSplitBy);
-                int labelIndex = dataRow.length - 1;  // 最后一列（表示是否为攻击）
-                int attackTypeIndex = dataRow.length - 2;  // 倒数第二列（表示攻击类型）
+                int labelIndex = dataRow.length - 1;  // Last column (indicating attack or benign)
+                int attackTypeIndex = dataRow.length - 2;  // Second to last column (indicating attack type)
 
                 if (labelIndex < 0 || attackTypeIndex < 0) {
-                    continue;  // 跳过格式不正确的行
+                    continue;  // Skip rows with incorrect format
                 }
 
-                String label = dataRow[labelIndex].trim();  // 获取最后一列的值
-                String attackType = dataRow[attackTypeIndex].trim();  // 获取倒数第二列的攻击类型
+                String label = dataRow[labelIndex].trim();  // Get the value of the last column
+                String attackType = dataRow[attackTypeIndex].trim();  // Get the attack type from second to last column
 
-                if (label.equals("1")) {  // 如果最后一列为1，表示是攻击
+                if (label.equals("1")) {  // If the last column is 1, it's an attack
                     attackCount.put(attackType, attackCount.getOrDefault(attackType, 0) + 1);
-                    attackTotal[0]++;  // 累计总攻击数
-                } else if (label.equals("0")) {  // 如果最后一列为0，表示是benign
+                    attackTotal[0]++;  // Increment total attack count
+                } else if (label.equals("0")) {  // If the last column is 0, it's benign
                     benignCount[0]++;
                 }
             }
@@ -119,7 +119,7 @@ public class DirectoryNB15CSVProcessor {
         }
     }
 
-    // 将攻击按类别分类
+    // Categorize attacks by type
     public static Map<String, Map<String, Integer>> categorizeAttacks(Map<String, Integer> attackCount) {
         Map<String, Map<String, Integer>> categorized = new HashMap<>();
 
@@ -127,7 +127,7 @@ public class DirectoryNB15CSVProcessor {
             String attackType = entry.getKey();
             int count = entry.getValue();
 
-            // 使用映射进行简单的分类（可以根据需求进一步细分）
+            // Simple classification based on attack type (can be further refined based on need)
             String category;
             if (attackType.contains("Web Attack")) {
                 category = "Web Attack";
@@ -141,7 +141,7 @@ public class DirectoryNB15CSVProcessor {
                 category = "Other";
             }
 
-            // 更新分类映射
+            // Update category mapping
             categorized.putIfAbsent(category, new HashMap<>());
             categorized.get(category).put(attackType, count);
         }
