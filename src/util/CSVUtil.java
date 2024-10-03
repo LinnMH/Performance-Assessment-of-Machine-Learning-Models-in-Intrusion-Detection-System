@@ -1,14 +1,18 @@
 package util;
 
+import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader;
 import weka.core.converters.ArffSaver;
 import weka.core.converters.CSVLoader;
 import weka.core.converters.CSVSaver;
+import weka.filters.unsupervised.attribute.SortLabels;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class CSVUtil {
 
@@ -23,29 +27,6 @@ public class CSVUtil {
         }
         return fileNames;
     }
-//
-//    public static void loadFolder(String folderName) throws Exception {
-//        List<String> fileNames = listFiles(folderName);
-//        for (String fileName : fileNames) {
-//            loadFile(fileName);
-//        }
-//    }
-//    private static void loadFile(String fileName) throws Exception{
-//        BufferedReader br = new BufferedReader(new FileReader(fileName));
-//        String line = br.readLine();
-//        if (line == null) {
-//            return;
-//        }
-//        List<String[]> lines = new ArrayList<>();
-//        String[] dimensions = line.split(",");
-//
-//        while((line = br.readLine()) != null) {
-//            dimensions = line.split(",");
-//            lines.add(dimensions);
-//        }
-//
-//        br.close();
-//    }
 
     public static void combineFolder(String folderName, String targetFileName) throws Exception {
         List<String> fileNames = listFiles(folderName);
@@ -71,11 +52,28 @@ public class CSVUtil {
         bw.close();
     }
 
-    public static void csvToArff(String srcFile, String dstFile) throws IOException {
+    public static void csvToArff(String srcFile, String dstFile, Map<String, List<String>> attributes) throws IOException {
         CSVLoader loader = new CSVLoader();
         loader.setSource(new File(srcFile));
+        String[] nominalVals = { attributes.size() + ":" + String.join(",", attributes.get("Label")) };
+        System.out.println(String.join("\n", nominalVals));
+        loader.setNominalLabelSpecs(nominalVals);
         Instances data = loader.getDataSet();
 
+        ArffSaver saver = new ArffSaver();
+        saver.setInstances(data);
+        saver.setFile(new File(dstFile));
+        saver.writeBatch();
+    }
+
+    public static void removeLabel(String srcFile, String dstFile, String trainFile) throws IOException {
+        ArffLoader loader = new ArffLoader();
+        loader.setSource(new File(srcFile));
+        Instances data = loader.getDataSet();
+        data.setClassIndex(data.numAttributes() -1);
+        for (int i = 0; i < data.size(); i++) {
+            data.instance(i).setClassMissing();
+        }
         ArffSaver saver = new ArffSaver();
         saver.setInstances(data);
         saver.setFile(new File(dstFile));
@@ -93,19 +91,4 @@ public class CSVUtil {
         saver.writeBatch();
     }
 
-    public static void modifyLabel(String srcFile, String dstFile, String substitute) throws IOException {
-        BufferedWriter bw = new BufferedWriter(new FileWriter(dstFile));
-        BufferedReader br = new BufferedReader(new FileReader(srcFile));
-        String line = br.readLine();  // first line is dimension names
-        bw.write(line);
-        while ((line = br.readLine()) != null) {
-            String[] splits = line.split(",");
-            splits[splits.length - 1] = substitute;
-            line = String.join(",", splits);
-            bw.newLine();
-            bw.write(line);
-        }
-        br.close();
-        bw.close();
-    }
 }
