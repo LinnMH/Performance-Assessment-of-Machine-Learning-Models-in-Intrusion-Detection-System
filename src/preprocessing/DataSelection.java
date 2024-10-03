@@ -61,7 +61,7 @@ public class DataSelection {
         trainWriter.close();
         testWriter.close();
 
-        showStat(totalCounts, trainCounts);
+//        showStat(totalCounts, trainCounts);
 
         attributes.get("Label").addAll(totalCounts.keySet());
         return attributes;

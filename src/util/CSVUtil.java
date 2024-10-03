@@ -1,18 +1,15 @@
 package util;
 
-import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader;
 import weka.core.converters.ArffSaver;
 import weka.core.converters.CSVLoader;
 import weka.core.converters.CSVSaver;
-import weka.filters.unsupervised.attribute.SortLabels;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class CSVUtil {
 
@@ -56,7 +53,6 @@ public class CSVUtil {
         CSVLoader loader = new CSVLoader();
         loader.setSource(new File(srcFile));
         String[] nominalVals = { attributes.size() + ":" + String.join(",", attributes.get("Label")) };
-        System.out.println(String.join("\n", nominalVals));
         loader.setNominalLabelSpecs(nominalVals);
         Instances data = loader.getDataSet();
 
