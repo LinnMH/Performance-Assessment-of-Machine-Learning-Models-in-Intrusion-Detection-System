@@ -1,10 +1,12 @@
 package assessment;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Metric {
 
-    public static void evaluate(String testFile, String predictFile, String metricFile) throws IOException {
+    public static void evaluateBinary(String testFile, String predictFile, String metricFile) throws IOException {
         BufferedReader testReader = new BufferedReader(new FileReader(testFile));
         BufferedReader predictReader = new BufferedReader(new FileReader(predictFile));
 
@@ -12,23 +14,25 @@ public class Metric {
         String testLine = testReader.readLine();
         String predictLine = predictReader.readLine();
 
+        double totalLine = 0;
         double tp = 0;
         double tn = 0;
         double fp = 0;
         double fn = 0;
 
         while (testLine != null && predictLine != null) {
+            totalLine++;
             String[] testSplits = testLine.split(",");
             String[] predictSplits = predictLine.split(",");
             String testLabel = testSplits[testSplits.length - 1];
             String predictLabel = predictSplits[predictSplits.length - 1];
 
             // Prediction is correct
-            if (testLabel.equalsIgnoreCase(predictLabel)) {
+            if (testLabel.trim().equalsIgnoreCase(predictLabel.trim())) {
                 if (testLabel.equalsIgnoreCase("benign")) {
-                    tn++;
-                } else {
                     tp++;
+                } else {
+                    tn++;
                 }
             // Prediction is wrong
             } else {
@@ -63,6 +67,7 @@ public class Metric {
         sb.append("Precision: " + precision + "\n");
         sb.append("Recall: " + recall + "\n");
         sb.append("F1 score: " + f1score + "\n");
+        sb.append("Total lines: " + totalLine + "\n");
 
         testReader.close();
         predictReader.close();

@@ -22,7 +22,15 @@ public class DataSelection {
     }
 
     // return attributes and nominal values
-    public static Map<String, List<String>> select(String originalFile, String trainFile, String testFile, double percent) throws Exception {
+    public static Map<String, List<String>> select(String originalFile, String trainFile, String testFile, String rule) throws Exception {
+        Map<String, Double> percents = new HashMap<>();
+        for (String str : rule.split(";")) {
+            String[] splits = str.split("=");
+            String label = splits[0];
+            double percent = Double.parseDouble(splits[1]);
+            percents.put(label, percent);
+        }
+
         Map<String, List<String>> attributes = new HashMap<>();
         Map<String, Integer> totalCounts = count(originalFile);
         Map<String, Integer> trainCounts = new HashMap<>();
@@ -47,6 +55,9 @@ public class DataSelection {
             int totalCount = totalCounts.get(label);
             int trainCount = trainCounts.getOrDefault(label, 0);
 
+            double percent = percents.getOrDefault(label.toLowerCase(),
+                    percents.getOrDefault("default", 1.0));
+
             if ((double)trainCount < (double)totalCount * percent) {
                 trainCounts.put(label, trainCount + 1);
                 trainWriter.newLine();
@@ -60,7 +71,6 @@ public class DataSelection {
         br.close();
         trainWriter.close();
         testWriter.close();
-
 //        showStat(totalCounts, trainCounts);
 
         attributes.get("Label").addAll(totalCounts.keySet());
