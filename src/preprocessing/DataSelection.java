@@ -22,7 +22,8 @@ public class DataSelection {
     }
 
     // return attributes and nominal values
-    public static Map<String, List<String>> select(String originalFile, String trainFile, String testFile, String rule) throws Exception {
+    public static Map<String, List<String>> select(String originalFile, String trainFile, String testFile,
+                                                   String rule, boolean filterNaN) throws Exception {
         Map<String, Double> percents = new HashMap<>();
         for (String str : rule.split(";")) {
             String[] splits = str.split("=");
@@ -50,6 +51,11 @@ public class DataSelection {
         testWriter.write(line);
 
         while((line = br.readLine()) != null) {
+            if (filterNaN){
+                if (line.toLowerCase().contains(",infinity,") || line.toLowerCase().contains(",nan,")) {
+                    continue;
+                }
+            }
             String[] splits = line.split(",");
             String label = splits[splits.length -1];
             int totalCount = totalCounts.get(label);

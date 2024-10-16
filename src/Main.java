@@ -21,9 +21,9 @@ public class Main {
 
 //        DataGroup.group("D:\\csv\\IDS2017_Combined.csv", "D:\\csv\\IDS2017_grouped.csv",
 //                "ids2017");
-
+//
         Map<String, List<String>> labels = DataSelection.select("D:\\csv\\IDS2017_Combined.csv",
-                "D:\\csv\\IDS2017_train.csv", "D:\\csv\\IDS2017_test.csv", "default=0.2");
+                "D:\\csv\\IDS2017_train.csv", "D:\\csv\\IDS2017_test.csv", "default=0.2", true);
         System.out.println("Finished selecting data as training and testing dataset");
 
         CSVUtil.csvToArff("D:\\csv\\IDS2017_train.csv", "D:\\csv\\IDS2017_train.arff", labels);
@@ -32,7 +32,7 @@ public class Main {
         CSVUtil.csvToArff("D:\\csv\\IDS2017_test.csv", "D:\\csv\\IDS2017_test.arff", labels);
         System.out.println("Finished converting testing csv to arff");
 
-        WekaModel model = new WekaModel("j48");
+        WekaModel model = new WekaModel("naivebayes");
         model.evaluate("D:\\csv\\IDS2017_train.arff", "D:\\csv\\IDS2017_test.arff", "D:\\csv\\IDS2017_metric.txt");
 
 //        System.out.println("Start training model with training dataset");

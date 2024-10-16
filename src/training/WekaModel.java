@@ -36,7 +36,7 @@ public class WekaModel {
 //            classifier = new SupportVectorMachineModel();
         } else if (modelName.equalsIgnoreCase("mlp")) {
             classifier = new MultilayerPerceptron();
-        } else if (modelName.equalsIgnoreCase("naiivebayes")) {
+        } else if (modelName.equalsIgnoreCase("naivebayes")) {
             classifier = new NaiveBayes();
         } else if (modelName.equalsIgnoreCase("bayesnet")) {
             classifier = new BayesNet();
