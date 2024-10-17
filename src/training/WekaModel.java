@@ -4,6 +4,7 @@ import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.BayesNet;
 import weka.classifiers.bayes.NaiveBayes;
+import weka.classifiers.functions.LibSVM;
 import weka.classifiers.functions.MultilayerPerceptron;
 import weka.classifiers.meta.CVParameterSelection;
 import weka.classifiers.trees.J48;
@@ -33,7 +34,7 @@ public class WekaModel {
             j48.setSubtreeRaising(true);
             classifier = j48;
         } else if (modelName.equalsIgnoreCase("svm")) {
-//            classifier = new SupportVectorMachineModel();
+            classifier = new LibSVM();
         } else if (modelName.equalsIgnoreCase("mlp")) {
             classifier = new MultilayerPerceptron();
         } else if (modelName.equalsIgnoreCase("naivebayes")) {

@@ -16,5 +16,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="LibSVM" level="project" />
+    <orderEntry type="library" name="libsvm-full" level="project" />
   </component>
 </module>
