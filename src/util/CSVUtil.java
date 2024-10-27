@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class CSVUtil {
 
-    private static List<String> listFiles(String folderName) {
+    public static List<String> listFiles(String folderName) {
         List<String> fileNames = new ArrayList<>();
         File folder = new File(folderName);
         for (final File fileEntry : folder.listFiles()) {
@@ -52,8 +52,9 @@ public class CSVUtil {
     public static void csvToArff(String srcFile, String dstFile, Map<String, List<String>> attributes) throws IOException {
         CSVLoader loader = new CSVLoader();
         loader.setSource(new File(srcFile));
-        String[] nominalVals = { attributes.size() + ":" + String.join(",", attributes.get("Label")) };
+        String[] nominalVals = { attributes.size() - 1 + ":" + String.join(",", attributes.get("Label")) };
         loader.setNominalLabelSpecs(nominalVals);
+        System.out.println(String.join(",", nominalVals));
         Instances data = loader.getDataSet();
 
         ArffSaver saver = new ArffSaver();

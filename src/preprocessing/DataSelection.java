@@ -23,13 +23,13 @@ public class DataSelection {
 
     // return attributes and nominal values
     public static Map<String, List<String>> select(String originalFile, String trainFile, String testFile,
-                                                   String rule, boolean filterNaN) throws Exception {
+                                                   String rule, boolean filterNaN, boolean writeTest) throws Exception {
         Map<String, Double> percents = new HashMap<>();
         for (String str : rule.split(";")) {
             String[] splits = str.split("=");
             String label = splits[0];
             double percent = Double.parseDouble(splits[1]);
-            percents.put(label, percent);
+            percents.put(label.toLowerCase(), percent);
         }
 
         Map<String, List<String>> attributes = new HashMap<>();
@@ -68,7 +68,7 @@ public class DataSelection {
                 trainCounts.put(label, trainCount + 1);
                 trainWriter.newLine();
                 trainWriter.write(line);
-            } else {
+            } else if (writeTest) {
                 testWriter.newLine();
                 testWriter.write(line);
             }
@@ -77,7 +77,7 @@ public class DataSelection {
         br.close();
         trainWriter.close();
         testWriter.close();
-//        showStat(totalCounts, trainCounts);
+        showStat(totalCounts, trainCounts);
 
         attributes.get("Label").addAll(totalCounts.keySet());
         return attributes;
