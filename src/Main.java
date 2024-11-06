@@ -13,37 +13,43 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-//        CSVUtil.combineFolder("D:\\csv\\ids2017",
-//                "D:\\csv\\IDS2017_Combined.csv");
+//        CSVUtil.combineFolder("D:\\csv\\ids2018",
+//                "D:\\csv\\IDS2018_Combined.csv");
 //        System.out.println("Finished combining csv files");
 
 //        DataGroup.group("D:\\csv\\IDS2017_Combined.csv", "D:\\csv\\IDS2017_grouped.csv",
 //                "ids2017");
 
-//        Map<String, List<String>> labels = DataSelection.select("D:\\csv\\IDS2017_Combined.csv",
-//                "D:\\csv\\IDS2017_train.csv", "D:\\csv\\IDS2017_test.csv",
-//                "default=0.2", false, false);
-//        System.out.println("Finished selecting data as training and testing dataset");
+        Map<String, List<String>> labels = DataSelection.select("D:\\csv\\IDS2017_Combined.csv",
+                "D:\\csv\\IDS2017_train.csv", "D:\\csv\\IDS2017_test.csv",
+                "default=0.2", false, false);
+        System.out.println("Finished selecting data as training and testing dataset");
 //
 //        DataFilter.filterCol("D:\\csv\\IDS2017_train.csv", "D:\\csv\\IDS2017_train_filtered.csv", new int[]{55}, true);
 //        System.out.println("Finished filtering train data");
-//
-//        DataFilter.filterCol("D:\\csv\\IDS2018\\02-14-2018.csv", "D:\\csv\\IDS2018_test_filtered.csv", new int[]{1,2}, true);
+
+//        DataFilter.filterCol("D:\\csv\\IDS2018_Combined.csv", "D:\\csv\\IDS2018_test_filtered.csv", new int[]{1,2}, true);
 //        System.out.println("Finished filtering test data");
 //
-//        DataFilter.replaceHeaderLabel("D:\\csv\\IDS2018_test_filtered.csv", "D:\\csv\\IDS2018_test_replaced.csv",
-//                "D:\\csv\\IDS2017_train_filtered.csv",
-//                "Benign=BENIGN;FTP-BruteForce=FTP-Patator;SSH-Bruteforce=SSH-Patator");
-//        System.out.println("Finished replacing header and label of test data");
-//
+        DataFilter.replaceHeaderLabel("D:\\csv\\IDS2018_test_filtered.csv", "D:\\csv\\IDS2018_test_replaced.csv",
+                "D:\\csv\\IDS2017_train_filtered.csv",
+                "Benign=BENIGN;FTP-BruteForce=FTP-Patator;SSH-Bruteforce=SSH-Patator;");
+
+        DataFilter.replaceHeaderLabel("D:\\csv\\IDS2018_test_filtered.csv", "D:\\csv\\IDS2018_test_replaced.csv",
+                "D:\\csv\\IDS2017_train_filtered.csv",
+                "Benign=BENIGN;FTP-BruteForce=BruteForce;SSH-Bruteforce=BruteForce;Brute Force -XSS=Web Attack;" +
+                        "Brute Force -Web=BruteForce;DDOS attack-HOIC=DOS;DDOS attack-LOIC-UDP=DOS;DDoS attacks-LOIC-HTTP=DOS;" +
+                        "DoS attacks-GoldenEye=DOS;DoS attacks-Hulk=DOS;DoS attacks-SlowHTTPTest=DOS;DoS attacks-Slowloris=DOS;" +
+                        "SQL Injection=Web Attack;");
+
 //        CSVUtil.csvToArff("D:\\csv\\IDS2017_train_filtered.csv", "D:\\csv\\IDS2017_train.arff", labels);
 //        System.out.println("Finished converting training csv to arff");
 //
 //        CSVUtil.csvToArff("D:\\csv\\IDS2018_test_replaced.csv", "D:\\csv\\IDS2018_test.arff", labels);
 //        System.out.println("Finished converting testing csv to arff");
 
-        WekaModel model = new WekaModel("j48");
-        model.evaluate("D:\\csv\\IDS2017_train.arff", "D:\\csv\\IDS2018_test.arff", "D:\\csv\\IDS2017_metric.txt");
+//        WekaModel model = new WekaModel("j48");
+//        model.evaluate("D:\\csv\\IDS2017_train.arff", "D:\\csv\\IDS2018_test.arff", "D:\\csv\\IDS2017_metric.txt");
 
 //        System.out.println("Start training model with training dataset");
 //        long start = System.currentTimeMillis();
