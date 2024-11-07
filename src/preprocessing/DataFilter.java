@@ -44,13 +44,14 @@ public class DataFilter {
 
         BufferedReader br = new BufferedReader(new FileReader(srcFile));
         BufferedWriter bw = new BufferedWriter(new FileWriter(dstFile));
-        BufferedReader headReader = new BufferedReader(new FileReader(headerFile));
-
-        String line = headReader.readLine();
+        String line = br.readLine(); // skip header
+        if (headerFile != null) {
+            BufferedReader headReader = new BufferedReader(new FileReader(headerFile));
+            line = headReader.readLine();
+            headReader.close();
+        }
         bw.write(line);
         bw.newLine();
-
-        line = br.readLine(); // skip header
         while ((line = br.readLine()) != null) {
             // Split the line into columns
             String[] columns = line.split(",");
@@ -65,7 +66,6 @@ public class DataFilter {
         }
         br.close();
         bw.close();
-        headReader.close();
     }
 
 }

@@ -20,6 +20,8 @@ public class DataGroup {
                 splits[splits.length -1] = getIDS2017Label(label);
             } else if (rule.equalsIgnoreCase("binary")) {
                 splits[splits.length -1] = getBinaryLabel(label);
+            } else if (rule.equalsIgnoreCase("ids2017to2018")) {
+                splits[splits.length -1] = getIDS2017to2018Label(label);
             }
 
             line = String.join(",", splits);
@@ -45,6 +47,26 @@ public class DataGroup {
             return "r2l";
         } else if (label.contains("infiltration")) {
             return "infiltration";
+        }
+        return label;
+    }
+
+    private static String getIDS2017to2018Label(String label) {
+        label = label.toLowerCase();
+        if (label.contains("bot")) {
+            return "Bot";
+        } else if (label.contains("web attack")) {
+            return "Web Attack";
+        } else if (label.contains("dos")) {
+            return "DoS";
+        } else if (label.contains("portscan")) {
+            return "PortScan";
+        } else if (label.contains("patator") || label.contains("heartbleed")) {
+            return "BruteForce";
+        } else if (label.contains("infiltration")) {
+            return "PortScan";
+        } else if (label.contains("benign")) {
+            return "Benign";
         }
         return label;
     }

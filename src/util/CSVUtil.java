@@ -7,9 +7,7 @@ import weka.core.converters.CSVLoader;
 import weka.core.converters.CSVSaver;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CSVUtil {
 
@@ -32,7 +30,9 @@ public class CSVUtil {
         for (String fileName : fileNames) {
             BufferedReader br = new BufferedReader(new FileReader(fileName));
             String line = br.readLine();  // first line is dimension names
+            System.out.println("Current file: " + fileName + ". Header: " + line);
             if (line == null) {
+                System.err.println("Error. Line is empty.");
                 return;
             }
             if (attributes == null) {
@@ -41,6 +41,10 @@ public class CSVUtil {
                 bw.write(attributes);
             }
             while ((line = br.readLine()) != null) {
+                if (line.toLowerCase().contains("label")) {
+                    System.out.println("Removed Line: " + line);
+                    continue;
+                }
                 bw.newLine();
                 bw.write(line);
             }
@@ -52,7 +56,7 @@ public class CSVUtil {
     public static void csvToArff(String srcFile, String dstFile, Map<String, List<String>> attributes) throws IOException {
         CSVLoader loader = new CSVLoader();
         loader.setSource(new File(srcFile));
-        String[] nominalVals = { attributes.size() - 1 + ":" + String.join(",", attributes.get("Label")) };
+        String[] nominalVals = { attributes.size() + ":" + String.join(",", attributes.get("Label")) };
         loader.setNominalLabelSpecs(nominalVals);
         System.out.println(String.join(",", nominalVals));
         Instances data = loader.getDataSet();
@@ -86,6 +90,23 @@ public class CSVUtil {
         saver.setInstances(data);
         saver.setFile(new File(dstFile));
         saver.writeBatch();
+    }
+
+    public static Map<String, List<String>> getAttributes(String fileName) throws IOException {
+        Map<String, List<String>> attributes = new HashMap<>();
+        BufferedReader br = new BufferedReader(new FileReader(fileName));
+        String line = br.readLine();
+        for (String attribute : line.split(",")) {
+            attributes.put(attribute.trim(), new ArrayList<>());
+        }
+        Set<String> labels = new HashSet<>();
+        while((line = br.readLine()) != null) {
+            String[] split = line.split(",");
+            labels.add(split[split.length - 1]);
+        }
+        br.close();
+        attributes.get("Label").addAll(labels);
+        return attributes;
     }
 
 }

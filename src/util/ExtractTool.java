@@ -9,7 +9,7 @@ import java.util.Set;
 public class ExtractTool {
 
     public static void main(String[] args) throws IOException {
-        List<String> fileNames = CSVUtil.listFiles("D:\\csv\\IDS2018");
+        List<String> fileNames = CSVUtil.listFiles("D:\\csv\\nb15");
         Set<String> labels = new HashSet<>();
 
         for (String fileName : fileNames) {
@@ -24,7 +24,7 @@ public class ExtractTool {
 
         String[] array = labels.toArray(new String[0]);
         Arrays.sort(array);
-        BufferedWriter bw = new BufferedWriter(new FileWriter("D:\\csv\\ids2018_labels.csv"));
+        BufferedWriter bw = new BufferedWriter(new FileWriter("D:\\csv\\nb15_labels.csv"));
         String result = String.join(",", array);
         bw.write(result);
         bw.close();;
