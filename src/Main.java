@@ -10,53 +10,53 @@ import java.util.Map;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-//        evalNB15();
-//        evalNB15Standalone();
-//        eval2018();
-//        eval2018Standalone();
+        evalNB15By2017();
+        evalNB15Standalone();
+        eval2018By2017();
+        eval2018Standalone();
         eval2018ByNB15();
-//        eval2017();
+        eval2017Standalone();
     }
 
-    public static void evalNB15() throws Exception {
-//        CSVUtil.combineFolder("D:\\csv\\ids2017","D:\\csv\\IDS2017_Combined.csv");
-//        System.out.println("Finished combining csv files");
-//
-//        DataGroup.group("D:\\csv\\IDS2017_Combined.csv", "D:\\csv\\IDS2017_grouped.csv",
-//                "ids2017to2018");
-//
-//        DataSelection.select("D:\\csv\\IDS2017_grouped.csv",
-//                "D:\\csv\\IDS2017_train.csv", "D:\\csv\\empty.csv",
-//                "default=0.2", false, false);
-//        System.out.println("Finished selecting data as training and testing dataset");
-//
-//        DataFilter.filterCol("D:\\csv\\IDS2017_train.csv", "D:\\csv\\IDS2017_train_filtered.csv", new int[]{55}, true);
-//        System.out.println("Finished filtering train data");
-//
+    public static void evalNB15By2017() throws Exception {
+        CSVUtil.combineFolder("D:\\csv\\ids2017","D:\\csv\\IDS2017_Combined.csv");
+        System.out.println("Finished combining csv files");
+
+        DataGroup.group("D:\\csv\\IDS2017_Combined.csv", "D:\\csv\\IDS2017_grouped.csv",
+                "ids2017to2018");
+
+        DataSelection.select("D:\\csv\\IDS2017_grouped.csv",
+                "D:\\csv\\IDS2017_train.csv", "D:\\csv\\empty.csv",
+                "default=0.2", false, false);
+        System.out.println("Finished selecting data as training and testing dataset");
+
+        DataFilter.filterCol("D:\\csv\\IDS2017_train.csv", "D:\\csv\\IDS2017_train_filtered.csv", new int[]{55}, true);
+        System.out.println("Finished filtering train data");
+
         Map<String, List<String>> attributes = CSVUtil.getAttributes("D:\\csv\\IDS2017_train_filtered.csv");
-//
-//        CSVUtil.csvToArff("D:\\csv\\IDS2017_train_filtered.csv", "D:\\csv\\IDS2017_train.arff", attributes);
-//        System.out.println("Finished converting training csv to arff");
 
-//        DataFilter.filterCol("D:\\csv\\nb15\\CICFlowMeter_out.csv", "D:\\csv\\nb15_test_filtered.csv",
-//                new int[]{0, 1, 2, 3, 5, 6}, true);
-//        System.out.println("Finished filtering test data");
+        CSVUtil.csvToArff("D:\\csv\\IDS2017_train_filtered.csv", "D:\\csv\\IDS2017_train.arff", attributes);
+        System.out.println("Finished converting training csv to arff");
 
-//        DataFilter.replaceHeaderLabel("D:\\csv\\nb15_test_filtered.csv", "D:\\csv\\nb15_test_replaced.csv",
-//                "D:\\csv\\IDS2017_train_filtered.csv",
-//                "Benign=Benign;DoS=DoS;Reconnaissance=PortScan;Exploits=Bot;Backdoor=Bot;Shellcode=Bot;" +
-//                        "Worms=Web Attack;Fuzzers=Web Attack;Analysis=Web Attack;Generic=Web Attack");
-//        System.out.println("Finished replacing test data header label");
-//
-//        CSVUtil.csvToArff("D:\\csv\\nb15_test_replaced.csv", "D:\\csv\\nb15_test.arff", attributes);
-//        System.out.println("Finished converting testing csv to arff");
-//
+        DataFilter.filterCol("D:\\csv\\nb15\\CICFlowMeter_out.csv", "D:\\csv\\nb15_test_filtered.csv",
+                new int[]{0, 1, 2, 3, 5, 6}, true);
+        System.out.println("Finished filtering test data");
+
+        DataFilter.replaceHeaderLabel("D:\\csv\\nb15_test_filtered.csv", "D:\\csv\\nb15_test_replaced.csv",
+                "D:\\csv\\IDS2017_train_filtered.csv",
+                "Benign=Benign;DoS=DoS;Reconnaissance=PortScan;Exploits=Bot;Backdoor=Bot;Shellcode=Bot;" +
+                        "Worms=Web Attack;Fuzzers=Web Attack;Analysis=Web Attack;Generic=Web Attack");
+        System.out.println("Finished replacing test data header label");
+
+        CSVUtil.csvToArff("D:\\csv\\nb15_test_replaced.csv", "D:\\csv\\nb15_test.arff", attributes);
+        System.out.println("Finished converting testing csv to arff");
+
         WekaModel model = new WekaModel("j48");
         model.evaluate("D:\\csv\\IDS2017_train.arff", "D:\\csv\\nb15_test.arff", "D:\\csv\\nb15_metric.txt");
 
     }
 
-    public static void eval2018() throws Exception {
+    public static void eval2018By2017() throws Exception {
         CSVUtil.combineFolder("D:\\csv\\ids2017", "D:\\csv\\IDS2017_Combined.csv");
         System.out.println("Finished combining csv files");
 
@@ -99,7 +99,7 @@ public class Main {
         model.evaluate("D:\\csv\\IDS2017_train.arff", "D:\\csv\\IDS2018_test.arff", "D:\\csv\\IDS2018_metric.txt");
     }
 
-    public static void eval2017() throws Exception {
+    public static void eval2017Standalone() throws Exception {
         CSVUtil.combineFolder("D:\\csv\\ids2017",
                 "D:\\csv\\IDS2017_Combined.csv");
         System.out.println("Finished combining csv files");
@@ -170,22 +170,22 @@ public class Main {
 
 
     public static void eval2018ByNB15() throws Exception {
-//        DataFilter.filterCol("D:\\csv\\nb15\\CICFlowMeter_out.csv", "D:\\csv\\nb15_filtered.csv",
-//                new int[]{0, 1, 2, 3, 5, 6}, true);
-//        System.out.println("Finished filtering test data");
-//
-//        DataSelection.select("D:\\csv\\nb15_filtered.csv",
-//                "D:\\csv\\nb15_train.csv", "D:\\csv\\nb15_test.csv",
-//                "default=0.2", false, false);
-//        System.out.println("Finished selecting data as training and testing dataset");
-//
+        DataFilter.filterCol("D:\\csv\\nb15\\CICFlowMeter_out.csv", "D:\\csv\\nb15_filtered.csv",
+                new int[]{0, 1, 2, 3, 5, 6}, true);
+        System.out.println("Finished filtering test data");
+
+        DataSelection.select("D:\\csv\\nb15_filtered.csv",
+                "D:\\csv\\nb15_train.csv", "D:\\csv\\nb15_test.csv",
+                "default=0.2", false, false);
+        System.out.println("Finished selecting data as training and testing dataset");
+
         DataFilter.replaceHeaderLabel("D:\\csv\\nb15_train.csv", "D:\\csv\\nb15_replaced.csv",null,
                 "Benign=Benign;DoS=Attack;Reconnaissance=Attack;Exploits=Attack;Backdoor=Attack;Shellcode=Attack;" +
                         "Worms=Attack;Fuzzers=Attack;Analysis=Attack;Generic=Attack");
         System.out.println("Finished replacing test data header label");
-//
+
         Map<String, List<String>> attributes = CSVUtil.getAttributes("D:\\csv\\nb15_replaced.csv");
-//
+
         CSVUtil.csvToArff("D:\\csv\\nb15_replaced.csv", "D:\\csv\\nb15_train.arff", attributes);
         System.out.println("Finished converting training csv to arff");
 
