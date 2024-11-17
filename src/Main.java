@@ -65,7 +65,7 @@ public class Main {
 
         DataSelection.select("D:\\csv\\IDS2017_grouped.csv",
                 "D:\\csv\\IDS2017_train.csv", "D:\\csv\\empty.csv",
-                "default=0.2", false, false);
+                "default=0.2;bot=0;web attack=0;portscan=0;bruteforce=0", false, false);
         System.out.println("Finished selecting data as training and testing dataset");
 
         DataFilter.filterCol("D:\\csv\\IDS2017_train.csv", "D:\\csv\\IDS2017_train_filtered.csv", new int[]{55}, true);
