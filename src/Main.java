@@ -10,12 +10,12 @@ import java.util.Map;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        evalNB15By2017();
-        evalNB15Standalone();
+//        evalNB15By2017();
+//        evalNB15Standalone();
         eval2018By2017();
-        eval2018Standalone();
-        eval2018ByNB15();
-        eval2017Standalone();
+//        eval2018Standalone();
+//        eval2018ByNB15();
+//        eval2017Standalone();
     }
 
     public static void evalNB15By2017() throws Exception {

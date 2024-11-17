@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ExtractTool {
+public class ExtractUtil {
 
     public static void main(String[] args) throws IOException {
         List<String> fileNames = CSVUtil.listFiles("D:\\csv\\nb15");
